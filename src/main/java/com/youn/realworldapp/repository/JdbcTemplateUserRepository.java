@@ -1,14 +1,11 @@
 package com.youn.realworldapp.repository;
 
-import com.youn.realworldapp.domain.RegistrationUserForm;
-import com.youn.realworldapp.domain.User;
+import com.youn.realworldapp.dto.RegistrationUserForm;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class JdbcTemplateUserRepository implements UserRepository {
@@ -34,23 +31,10 @@ public class JdbcTemplateUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> inqUserEmail(String email) {
-        List<User> result = jdbcTemplate.query("select * from users\n" +
-                "where email = ?", userRowMapper(), email);
-
-        return result;
-    }
-
-    private RowMapper<User> userRowMapper() {
-        return (rs, rowNum) -> {
-            User user = new User();
-            user.setId(rs.getLong("id"));
-            user.setEmail(rs.getString("email"));
-            user.setPassword(rs.getString("password"));
-            user.setUsername(rs.getString("username"));
-            user.setBio(rs.getString("bio"));
-
-            return user;
-        };
+    public boolean checkEmailExists(String email) {
+        Integer inqResultCnt = jdbcTemplate.queryForObject("select count(*) from users\n" +
+                "where email = ?\n" +
+                "limit 1", Integer.class, email);
+        return inqResultCnt <= 0;
     }
 }

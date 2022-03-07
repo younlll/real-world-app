@@ -1,16 +1,13 @@
 package com.youn.realworldapp.repository;
 
 
-import com.youn.realworldapp.domain.RegistrationUserForm;
-import com.youn.realworldapp.domain.User;
-
-import java.util.List;
+import com.youn.realworldapp.dto.RegistrationUserForm;
 
 public interface UserRepository {
 
     // 사용자 등록
     RegistrationUserForm registrationUser(RegistrationUserForm userForm);
 
-    // 사용자 이메일 조회
-    List<User> inqUserEmail(String email);
+    // 사용자 이메일 존재여부 확인을 위한 조회
+    boolean checkEmailExists(String email);
 }
