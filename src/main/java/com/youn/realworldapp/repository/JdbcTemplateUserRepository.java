@@ -1,5 +1,6 @@
 package com.youn.realworldapp.repository;
 
+import com.youn.realworldapp.domain.User;
 import com.youn.realworldapp.dto.RegistrationUserForm;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -17,24 +18,24 @@ public class JdbcTemplateUserRepository implements UserRepository {
     }
 
     @Override
-    public RegistrationUserForm registrationUser(RegistrationUserForm userForm) {
+    public User registrationUser(User user) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("users").usingGeneratedKeyColumns("id");
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("email", userForm.getEmail());
-        parameters.put("username", userForm.getUsername());
-        parameters.put("password", userForm.getPassword());
+        parameters.put("email", user.getEmail());
+        parameters.put("username", user.getUsername());
+        parameters.put("password", user.getPassword());
 
         jdbcInsert.execute(parameters);
-        return userForm;
+
+        return user;
     }
 
     @Override
-    public boolean checkEmailExists(String email) {
-        Integer inqResultCnt = jdbcTemplate.queryForObject("select count(*) from users\n" +
-                "where email = ?\n" +
-                "limit 1", Integer.class, email);
-        return inqResultCnt <= 0;
+    public boolean existsByEmail(String email) {
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject("select exists(select 1\n" +
+                "from users\n" +
+                "where email = ?)", Boolean.class, email));
     }
 }
