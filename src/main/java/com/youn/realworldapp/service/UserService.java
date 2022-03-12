@@ -4,18 +4,23 @@ import com.youn.realworldapp.domain.User;
 import com.youn.realworldapp.dto.RegistrationUserForm;
 import com.youn.realworldapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 사용자 등록
      */
     public RegistrationUserForm registrationUser(RegistrationUserForm userForm) {
-        User user = RegistrationUserForm.toEntity(userForm.getEmail(), userForm.getUsername(), userForm.getPassword());
+        User user = RegistrationUserForm.toEntity(userForm.getEmail(), userForm.getUsername(), passwordEncoder.encode(userForm.getPassword()));
+
         validateDuplicateUser(userForm.getEmail());
+
         return RegistrationUserForm.toDto(userRepository.registrationUser(user));
     }
 
