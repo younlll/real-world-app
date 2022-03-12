@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.youn.realworldapp.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationUserForm {
 
     @Email(message = "이메일 형식에 맞지 않습니다.")
