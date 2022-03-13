@@ -25,7 +25,7 @@ public class UserService {
 
     public UserResponseForm loginUser(LoginUserForm userForm) {
         checkUserExistence(userForm.getEmail());
-        User user = userRepository.findByEmail(userForm.getEmail()).get();
+        User user = userRepository.findByEmail(userForm.getEmail());
         if(!passwordEncoder.matches(userForm.getPassword(), user.getPassword())) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }

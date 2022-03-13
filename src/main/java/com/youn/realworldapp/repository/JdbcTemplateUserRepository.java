@@ -42,12 +42,10 @@ public class JdbcTemplateUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        List<User> result =  jdbcTemplate.query("select * from users where email = ?"
+    public User findByEmail(String email) {
+        return jdbcTemplate.queryForObject("select * from users where email = ?"
             , userRowMapper(), email
         );
-
-        return result.stream().findAny();
     }
 
     private RowMapper<User> userRowMapper() {
