@@ -1,13 +1,15 @@
 package com.youn.realworldapp.repository;
 
 import com.youn.realworldapp.domain.User;
-import com.youn.realworldapp.dto.RegistrationUserForm;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class JdbcTemplateUserRepository implements UserRepository {
 
@@ -37,5 +39,26 @@ public class JdbcTemplateUserRepository implements UserRepository {
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject("select exists(select 1\n" +
                 "from users\n" +
                 "where email = ?)", Boolean.class, email));
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        List<User> result =  jdbcTemplate.query("select * from users where email = ?"
+            , userRowMapper(), email
+        );
+
+        return result.stream().findAny();
+    }
+
+    private RowMapper<User> userRowMapper() {
+        return (rs, rowNum) -> new User(
+                rs.getLong("id")
+                , rs.getString("email")
+                , rs.getString("password")
+                , rs.getString("token")
+                , rs.getString("username")
+                , rs.getString("bio")
+                , rs.getString("image")
+        );
     }
 }
