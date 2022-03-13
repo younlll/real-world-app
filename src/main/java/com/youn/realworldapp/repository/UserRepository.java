@@ -13,5 +13,5 @@ public interface UserRepository {
     boolean existsByEmail(String email);
 
     // 사용자 이메일을 이용한 사용자 정보 조회
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
 }
