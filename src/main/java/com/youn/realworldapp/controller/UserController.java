@@ -1,8 +1,10 @@
 package com.youn.realworldapp.controller;
 
+import com.youn.realworldapp.domain.User;
 import com.youn.realworldapp.dto.LoginUserForm;
 import com.youn.realworldapp.dto.RegistrationUserForm;
 import com.youn.realworldapp.dto.UserResponseForm;
+import com.youn.realworldapp.security.JwtTokenProvider;
 import com.youn.realworldapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/api/users")
     public ResponseEntity<RegistrationUserForm> register(@RequestBody @Valid RegistrationUserForm userForm) {
@@ -25,6 +28,9 @@ public class UserController {
 
     @PostMapping("/api/users/login")
     public ResponseEntity<UserResponseForm> login(@RequestBody @Valid LoginUserForm userForm) {
-        return ResponseEntity.ok(userService.loginUser(userForm));
+        User user = userService.loginUser(userForm);
+        String token = jwtTokenProvider.createToken(userForm.getEmail());
+        UserResponseForm userResponseForm = new UserResponseForm(user.getEmail(), token, user.getUsername(), user.getBio(), user.getImage());
+        return ResponseEntity.ok(userResponseForm);
     }
 }

@@ -1,4 +1,4 @@
-package com.youn.realworldapp;
+package com.youn.realworldapp.config;
 
 
 import com.youn.realworldapp.repository.JdbcTemplateUserRepository;
