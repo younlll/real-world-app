@@ -1,5 +1,5 @@
 package com.youn.realworldapp.config;
 
-public interface SessionConstants {
-    String LOGIN_USER = "loginUser";
+public class SessionConstants {
+    public final static String LOGIN_USER = "loginUser";
 }
