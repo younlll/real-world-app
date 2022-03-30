@@ -1,5 +1,6 @@
 package com.youn.realworldapp.controller;
 
+import com.youn.realworldapp.domain.User;
 import com.youn.realworldapp.dto.LoginUserForm;
 import com.youn.realworldapp.dto.RegistrationUserForm;
 import com.youn.realworldapp.dto.UserResponseForm;
@@ -25,6 +26,8 @@ public class UserController {
 
     @PostMapping("/api/users/login")
     public ResponseEntity<UserResponseForm> login(@RequestBody @Valid LoginUserForm userForm) {
-        return ResponseEntity.ok(userService.loginUser(userForm));
+        User user = userService.loginUser(userForm);
+        UserResponseForm userResponseForm = new UserResponseForm(user.getEmail(), user.getToken(), user.getUsername(), user.getBio(), user.getImage());
+        return ResponseEntity.ok(userResponseForm);
     }
 }
