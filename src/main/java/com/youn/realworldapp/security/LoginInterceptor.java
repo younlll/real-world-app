@@ -13,7 +13,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute(SessionConstants.LOGIN_USER, handler);
+
+        if(httpSession.getAttribute(SessionConstants.LOGIN_USER) == null) {
+            httpSession.setAttribute(SessionConstants.LOGIN_USER, handler);
+            return false;
+        }
         return true;
     }
 }
